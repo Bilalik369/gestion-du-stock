@@ -60,3 +60,39 @@ router.post("/" , ulpoad.single("image"), async(req , res) =>{
     }
 
 } );
+
+
+
+router.put('/:id' ,ulpoad.single("image"), async(req , res) =>{
+
+    const{id} = req.params;
+    const {title, description, price, stock} = req.body;
+    const image = req.file ? req.filename : req.body.image;
+
+
+    try{
+        const updateProduct = await Product.findByIdAndUpdate(id, {title , description, price, stock , image},
+            {new : true}
+
+        );
+
+        res.json(updateProduct);
+    }catch(erorr){
+        res.status(500).json({ erorr :"erreur de la metre a jour de produit"})
+    }
+
+
+});
+
+router.delete("/:id", async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      await Product.findByIdAndDelete(id);
+      res.json({ message: "Produit supprimé avec succès" });
+    } catch (error) {
+      res.status(500).json({ error: "Erreur lors de la suppression du produit" });
+    }
+  });
+  
+  module.exports = router;
